@@ -121,6 +121,22 @@ default_probs = log_reg_predictions[:, 1]
 
 yhat = test[["SK_ID_CURR"]]
 
-yhat["PredDefault"] = default_probs
+yhat["TARGET"] = default_probs
 
-yhat.to_csv("../submissions/log_reg_baseline.csv")
+test.head()
+#yhat.to_csv("../submissions/log_reg_baseline.csv")
+
+
+#%% Random Forest
+
+from sklearn.ensemble import RandomForestClassifier
+
+rf = RandomForestClassifier(n_estimators = 100, random_state = 50, verbose = 1, n_jobs = -1)
+
+rf.fit(X, train_labels)
+
+rf_predictions = rf.predict_proba(y)[:, 1]
+
+submit = test[["SK_ID_CURR"]]
+
+submit["TARGET"] = rf_predictions
